@@ -5,15 +5,50 @@
   <title>個人頁面 | Luke</title>
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
   <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* Antigravity 專屬動畫，不污染全域 */
+    @keyframes glitch {
+      0% { transform: translate(0) skew(0deg); }
+      20% { transform: translate(-2px, 1px) skew(2deg); filter: hue-rotate(90deg); }
+      40% { transform: translate(2px, -1px) skew(-2deg); }
+      60% { transform: translate(0) skew(0deg); filter: hue-rotate(0deg); }
+      80% { transform: translate(-1px, 2px) skew(1deg); }
+      100% { transform: translate(0) skew(0deg); }
+    }
+
+    .antigravity-float {
+      animation: float-away 15s ease-in forwards;
+    }
+    
+    @keyframes float-away {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-800px) rotate(180deg); opacity: 0; }
+    }
+
+    /* 藍屏死機樣式 */
+    #bsod {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #0000aa; color: #ffffff;
+      z-index: 99999;
+      font-family: 'Courier New', Courier, monospace;
+      padding: 50px;
+      box-sizing: border-box;
+      flex-direction: column;
+      justify-content: center;
+      cursor: none;
+    }
+  </style>
 </head>
-<body class="profile-page">
+<body class="profile-page" id="main-body" style="transition: transform 1s;">
 
   <a href="../index.html" class="back-btn">回到首頁</a>
 
   <header class="profile-header">
-    <img class="avatar" src="../assets/photos/luke.svg" alt="Luke">
+    <img id="luke-avatar" class="avatar" src="../assets/photos/luke.svg" alt="Luke">
     <div class="profile-info">
-      <h1>Luke</h1>
+      <h1 id="luke-name">Luke</h1>
       <p class="bio">專業的程式碼分號遺漏觀察員</p>
       <div class="tags">
         <span class="tag">Git</span>
@@ -24,13 +59,13 @@
 
   <main class="profile-content">
     <h3>關於我</h3>
-    <p>我致力於解決那種只要多加一個 <code>if</code> 就能解決，但卻偏要用三個設計模式來過度封裝的邏輯問題。在黎曼猜想的虛數邊界與 404 頁面的數位虛無之間，我反覆計算著如何在不引入非線性時間複雜度的前提下，優化我泡咖啡的遞迴深度。對我而言，生命就像是一個沒有結束條件的 <code>while</code> 迴圈，而我正在試圖透過調整垃圾回收機制的閾值，來推遲那不可避免的堆疊溢位 (Stack Overflow)。</p>
+    <p id="bio-text">我致力於解決那種只要多加一個 <code>if</code> 就能解決，但卻偏要用三個設計模式來過度封裝的邏輯問題。在黎曼猜想的虛數邊界與 404 頁面的數位虛無之間，我反覆計算著如何在不引入非線性時間複雜度的前提下，優化我泡咖啡的遞迴深度。對我而言，生命就像是一個沒有結束條件的 <code>while</code> 迴圈，而我正在試圖透過調整垃圾回收機制的閾值，來推遲那不可避免的堆疊溢位 (Stack Overflow)。</p>
   </main>
 
-  <section class="useless-box" style="background: #0f172a; border: 1px solid #1e293b; color: #38bdf8; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
+  <section class="useless-box" style="background: #0f172a; border: 1px solid #1e293b; color: #38bdf8; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden; transition: all 0.5s;">
     <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #38bdf8, transparent); opacity: 0.5;"></div>
     
-    <h4 style="color: #94a3b8; font-family: monospace;">// 虛擬矩陣運算核心 (Deprecated)</h4>
+    <h4 style="color: #94a3b8; font-family: monospace;">// 虛擬矩陣運算核心 (已被段祺瑞接管)</h4>
     
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0;">
       <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.2);">
@@ -44,19 +79,36 @@
       </div>
     </div>
 
-    <div style="text-align: left; font-family: monospace; font-size: 0.75rem; background: #020617; padding: 10px; border-radius: 4px; margin-bottom: 15px; border-left: 3px solid #38bdf8;">
+    <div id="terminal" style="text-align: left; font-family: monospace; font-size: 0.75rem; background: #020617; padding: 10px; border-radius: 4px; margin-bottom: 15px; border-left: 3px solid #38bdf8; transition: border-color 0.3s;">
       <div id="code-stream" style="color: #10b981;">> INITIALIZING NULL_POINTER_EXCEPTION...</div>
-      <div style="color: #64748b;">> OPTIMIZING COFFEE_RECURSION... DONE.</div>
+      <div id="hacked-stream" style="color: #ef4444; display: none;">> LOADING ANTIGRAVITY_MODULE.PY...</div>
     </div>
 
     <div class="progress-container" style="height: 4px; background: #1e293b;">
-      <div id="matrix-bar" style="width: 75%; height: 100%; background: #38bdf8; box-shadow: 0 0 10px #38bdf8;"></div>
+      <div id="matrix-bar" style="width: 75%; height: 100%; background: #38bdf8; box-shadow: 0 0 10px #38bdf8; transition: width 0.2s, background 0.5s;"></div>
+    </div>
+
+    <div id="extortion-box" style="margin-top: 20px; border: 1px dashed #ef4444; padding: 10px; border-radius: 4px; background: rgba(239, 68, 68, 0.1); display: none; position: relative; height: 40px;">
+      <p style="margin: 0; font-size: 0.75rem; color: #f87171; line-height: 40px; font-family: monospace;">⚠️ 正在轉移 100,000 DOGE 至段祺瑞錢包...</p>
+      <button id="runaway-btn" style="position: absolute; right: 10px; top: 10px; background: #ef4444; border: none; color: white; padding: 4px 10px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; transition: 0.1s;">取消扣款</button>
     </div>
     
-    <p style="font-size: 0.6rem; color: #475569; margin-top: 15px;">註：以上數據皆為 $O(2^n)$ 隨機生成，不具備任何物理意義。</p>
+    <p style="font-size: 0.6rem; color: #475569; margin-top: 15px;">註：以上數據皆為 $O(2^n)$ 隨機生成，但你的 DOGE 是真的。</p>
+
+    <div id="bsod">
+      <div style="background: white; color: #0000aa; display: inline-block; padding: 2px 8px; font-weight: bold; width: fit-content; margin-bottom: 20px;">ANTIGRAVITY_FAULT</div>
+      <p>A fatal exception 0xCOFFEE has occurred at 0028:C0011E36 in VxD DUAN(01).</p>
+      <p>The current application will be terminated.</p>
+      <p>* 記憶體洩漏突破物理極限，吳春辰已被踢出當前宇宙。<br>* ERR_COFFEE_OVERFLOW_CAUSED_BY_DUAN</p>
+      <br>
+      <p>Press any key to surrender your DOGE to 段祺瑞 and return to reality.</p>
+    </div>
 
     <script>
       let leak = 0;
+      let tickCount = 0;
+      
+      // 保留原本的 Log，並混入你的駭客干擾
       const logs = [
         "> CALCULATING REMAINING LIFE...",
         "> FLIPPING BITS IN THE VOID...",
@@ -64,18 +116,73 @@
         "> RESOLVING DIVIDE_BY_ZERO...",
         "> GARBAGE COLLECTING DREAMS..."
       ];
+      
+      const hackedLogs = [
+        "> WARNING: 偵測到來自「段祺瑞」的跨維度物理打擊",
+        "> ERROR: 吳春辰精神狀態即將溢位",
+        "> IMPORT ANTIGRAVITY... SUCCESS"
+      ];
 
       function updateMatrix() {
+        tickCount++;
+        
+        // 1. 維持他原本的運算功能
         document.getElementById('pi-entropy').innerText = (Math.PI * Math.random()).toFixed(8);
-        leak += Math.random() * 1024;
+        leak += Math.random() * 1024; // 每次約增加 500KB
         document.getElementById('memory-leak').innerText = (leak / 1024).toFixed(2) + " MB";
         document.getElementById('matrix-bar').style.width = Math.floor(Math.random() * 100) + '%';
         
         if (Math.random() > 0.7) {
-          document.getElementById('code-stream').innerText = logs[Math.floor(Math.random() * logs.length)];
+          // 機率性混入你的惡搞 Log
+          const pool = Math.random() > 0.8 ? hackedLogs : logs;
+          document.getElementById('code-stream').innerText = pool[Math.floor(Math.random() * pool.length)];
+        }
+
+        // --- 以下是我們安插的惡意連動邏輯 ---
+
+        // 階段一：3秒後，頭像被「反重力」吸走 (Idea 3 變體)
+        if (tickCount === 6) {
+          document.getElementById('luke-avatar').classList.add('antigravity-float');
+          document.getElementById('hacked-stream').style.display = 'block';
+        }
+
+        // 階段二：6秒後，整個頁面受到「跨維度打擊」傾斜抖動 (Idea 1)
+        if (tickCount === 12) {
+          document.getElementById('main-body').style.transform = 'rotate(-2deg)';
+          document.getElementById('luke-name').style.animation = 'glitch 0.3s infinite';
+          document.getElementById('terminal').style.borderLeftColor = '#ef4444';
+          document.getElementById('matrix-bar').style.background = '#ef4444';
+          document.getElementById('matrix-bar').style.boxShadow = '0 0 10px #ef4444';
+        }
+
+        // 階段三：9秒後，顯示 DOGE 扣款系統 (Idea 4)
+        if (tickCount === 18) {
+          document.getElementById('extortion-box').style.display = 'block';
+        }
+
+        // 終極階段：大約 15~18 秒後，記憶體洩漏破表，觸發 BSOD (Idea 2)
+        if (leak > 16000) {
+          document.getElementById('bsod').style.display = 'flex';
+          clearInterval(matrixInterval); // 停止運算，徹底死機
         }
       }
-      setInterval(updateMatrix, 500);
+
+      const matrixInterval = setInterval(updateMatrix, 500);
+
+      // DOGE 取消按鈕的逃跑邏輯
+      const btn = document.getElementById('runaway-btn');
+      btn.addEventListener('mouseover', () => {
+        const x = Math.random() * 200 - 100; // 隨機 X 位移
+        const y = Math.random() * 20 - 10;   // 隨機 Y 位移
+        btn.style.transform = `translate(${x}px, ${y}px)`;
+      });
+      
+      // BSOD 按下任意鍵重新整理
+      document.addEventListener('keydown', (e) => {
+        if (document.getElementById('bsod').style.display === 'flex') {
+          window.location.reload();
+        }
+      });
     </script>
   </section>
 
