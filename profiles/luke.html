@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>個人頁面 | Luke</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body class="profile-page">
+
+  <a href="../index.html" class="back-btn">回到首頁</a>
+
+  <header class="profile-header">
+    <img class="avatar" src="../assets/photos/luke.svg" alt="Luke">
+    <div class="profile-info">
+      <h1>Luke</h1>
+      <p class="bio">專業的程式碼分號遺漏觀察員</p>
+      <div class="tags">
+        <span class="tag">Git</span>
+        <span class="tag">Docker</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="profile-content">
+    <h3>關於我</h3>
+    <p>我致力於解決那種只要多加一個 <code>if</code> 就能解決，但卻偏要用三個設計模式來過度封裝的邏輯問題。在黎曼猜想的虛數邊界與 404 頁面的數位虛無之間，我反覆計算著如何在不引入非線性時間複雜度的前提下，優化我泡咖啡的遞迴深度。對我而言，生命就像是一個沒有結束條件的 <code>while</code> 迴圈，而我正在試圖透過調整垃圾回收機制的閾值，來推遲那不可避免的堆疊溢位 (Stack Overflow)。</p>
+  </main>
+
+  <section class="useless-box" style="background: #0f172a; border: 1px solid #1e293b; color: #38bdf8; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #38bdf8, transparent); opacity: 0.5;"></div>
+    
+    <h4 style="color: #94a3b8; font-family: monospace;">// 虛擬矩陣運算核心 (Deprecated)</h4>
+    
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 25px 0;">
+      <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid rgba(56, 189, 248, 0.2);">
+        <div style="font-size: 0.65rem; color: #64748b; text-transform: uppercase;">π 小數位數運算熵</div>
+        <div id="pi-entropy" style="font-family: 'Courier New', monospace; font-size: 1.5rem; color: #38bdf8;">3.1415...</div>
+      </div>
+      
+      <div style="background: rgba(30, 41, 59, 0.5); padding: 15px; border-radius: 8px; border: 1px solid rgba(236, 72, 153, 0.2);">
+        <div style="font-size: 0.65rem; color: #64748b; text-transform: uppercase;">記憶體洩漏模擬值</div>
+        <div id="memory-leak" style="font-family: 'Courier New', monospace; font-size: 1.5rem; color: #ec4899;">0 KB</div>
+      </div>
+    </div>
+
+    <div style="text-align: left; font-family: monospace; font-size: 0.75rem; background: #020617; padding: 10px; border-radius: 4px; margin-bottom: 15px; border-left: 3px solid #38bdf8;">
+      <div id="code-stream" style="color: #10b981;">> INITIALIZING NULL_POINTER_EXCEPTION...</div>
+      <div style="color: #64748b;">> OPTIMIZING COFFEE_RECURSION... DONE.</div>
+    </div>
+
+    <div class="progress-container" style="height: 4px; background: #1e293b;">
+      <div id="matrix-bar" style="width: 75%; height: 100%; background: #38bdf8; box-shadow: 0 0 10px #38bdf8;"></div>
+    </div>
+    
+    <p style="font-size: 0.6rem; color: #475569; margin-top: 15px;">註：以上數據皆為 $O(2^n)$ 隨機生成，不具備任何物理意義。</p>
+
+    <script>
+      let leak = 0;
+      const logs = [
+        "> CALCULATING REMAINING LIFE...",
+        "> FLIPPING BITS IN THE VOID...",
+        "> CACHE MISS IN BRAIN.EXE...",
+        "> RESOLVING DIVIDE_BY_ZERO...",
+        "> GARBAGE COLLECTING DREAMS..."
+      ];
+
+      function updateMatrix() {
+        document.getElementById('pi-entropy').innerText = (Math.PI * Math.random()).toFixed(8);
+        leak += Math.random() * 1024;
+        document.getElementById('memory-leak').innerText = (leak / 1024).toFixed(2) + " MB";
+        document.getElementById('matrix-bar').style.width = Math.floor(Math.random() * 100) + '%';
+        
+        if (Math.random() > 0.7) {
+          document.getElementById('code-stream').innerText = logs[Math.floor(Math.random() * logs.length)];
+        }
+      }
+      setInterval(updateMatrix, 500);
+    </script>
+  </section>
+
+</body>
+</html>

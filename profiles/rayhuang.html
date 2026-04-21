@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>段祺瑞的星際觀測站</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --danger: #ef4444;
+            --bg: #020617;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: var(--bg);
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            color: white;
+        }
+
+        /* 3D 宇宙容器 */
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* UI 配置 */
+        .overlay {
+            position: relative;
+            z-index: 10;
+            pointer-events: none;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        .back-btn {
+            pointer-events: auto;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .back-btn:hover { color: var(--primary); }
+
+        /* 個人資訊卡 */
+        .profile-header {
+            pointer-events: auto;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 350px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            margin-top: 20px;
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 20px;
+            border: 2px solid var(--primary);
+            margin-bottom: 15px;
+            transform: rotate(-5deg);
+        }
+
+        h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
+        .intro { color: #94a3b8; margin-top: 10px; line-height: 1.5; font-size: 0.95rem; }
+
+        /* 廢物功能區塊 */
+        .useless-box {
+            pointer-events: auto;
+            align-self: flex-end;
+            background: rgba(15, 23, 42, 0.8);
+            padding: 25px;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            width: 280px;
+            text-align: left;
+        }
+
+        h4 { margin: 0 0 10px 0; font-size: 0.9rem; color: #cbd5e1; }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #1e293b;
+            border-radius: 4px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            width: 12%; /* 初始剩餘壽命 */
+            height: 100%;
+            background: linear-gradient(90deg, var(--danger), #f59e0b);
+            animation: liver-shiver 0.3s infinite alternate;
+            transition: width 0.2s ease-out; /* 讓進度條增長時有平滑動畫 */
+        }
+
+        @keyframes liver-shiver {
+            from { opacity: 0.7; transform: scaleX(1); }
+            to { opacity: 1; transform: scaleX(1.02); }
+        }
+
+        /* 壓力感測器 */
+        .stress-meter {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .stress-text { font-size: 0.75rem; color: #94a3b8; margin-bottom: 8px; }
+        .stress-val { color: var(--danger); font-weight: bold; font-family: monospace; }
+
+        .boring-btn {
+            background: transparent;
+            border: 1px solid #334155;
+            color: #cbd5e1;
+            padding: 8px 0;
+            width: 100%;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+        .boring-btn:hover { 
+            background: var(--danger); 
+            color: white; 
+            border-color: var(--danger);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
+        .luck-card {
+            margin-top: 15px;
+            font-size: 0.8rem;
+            color: #fbbf24;
+            cursor: help;
+            text-align: center;
+        }
+
+        /* 全螢幕震動 */
+        .shake { animation: screen-shake 0.15s infinite; }
+        @keyframes screen-shake {
+            0% { transform: translate(0,0); }
+            25% { transform: translate(2px, 2px); }
+            50% { transform: translate(-2px, 1px); }
+            75% { transform: translate(1px, -2px); }
+            100% { transform: translate(0,0); }
+        }
+
+        .hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.2);
+            font-size: 0.7rem;
+            letter-spacing: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="canvas-container"></div>
+
+    <div class="overlay">
+        <header>
+            <a href="../index.html" class="back-btn">← 返回現實世界</a>
+            <div class="profile-header">
+                <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Duan" alt="頭像">
+                <div class="profile-info">
+                    <h1>段祺瑞</h1>
+                    <p class="intro">好想睡覺，看到幫我打吳春辰一下</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="useless-box">
+            <h4>肝臟剩餘壽命 (Live Error)</h4>
+            <div class="progress-container">
+                <div class="progress-bar" id="liver-bar"></div>
+            </div>
+            <p style="font-size: 0.65rem; color: #64748b;">警告：檢測到嚴重睡眠不足</p>
+
+            <div class="stress-meter">
+                <div class="stress-text">吳春辰壓力感測：<span id="stress-num" class="stress-val">0</span>%</div>
+                <button class="boring-btn" onclick="hitWu()">遠端毆打吳春辰</button>
+            </div>
+
+            <div class="luck-card" onclick="this.innerHTML='今日建議：原地冬眠'">
+                今日運勢：<span>大凶 (不宜 Debug)</span>
+            </div>
+        </section>
+    </div>
+
+    <div class="hint">DRAG TO ROTATE / SCROLL TO ZOOM</div>
+
+    <script>
+        // --- 1. Three.js 宇宙初始化 ---
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        // 星點背景
+        const starGeo = new THREE.BufferGeometry();
+        const starMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.7 });
+        const starCoords = [];
+        for (let i = 0; i < 7000; i++) {
+            starCoords.push((Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1500, (Math.random() - 0.5) * 1500);
+        }
+        starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starCoords, 3));
+        const starField = new THREE.Points(starGeo, starMat);
+        scene.add(starField);
+
+        // 太陽
+        const sun = new THREE.Mesh(
+            new THREE.SphereGeometry(6, 32, 32),
+            new THREE.MeshBasicMaterial({ color: 0xffdd44 })
+        );
+        scene.add(sun);
+
+        // 建立行星
+        function addPlanet(size, color, dist, speed) {
+            const mesh = new THREE.Mesh(
+                new THREE.SphereGeometry(size, 32, 32),
+                new THREE.MeshStandardMaterial({ color: color, roughness: 0.5 })
+            );
+            const orbit = new THREE.Object3D();
+            scene.add(orbit);
+            orbit.add(mesh);
+            mesh.position.set(dist, 0, 0);
+            return { orbit, speed };
+        }
+
+        const planets = [
+            addPlanet(1.5, 0x4f46e5, 18, 0.015),
+            addPlanet(2.2, 0x10b981, 30, 0.008),
+            addPlanet(3.5, 0xf43f5e, 45, 0.004)
+        ];
+
+        // 燈光
+        const pointLight = new THREE.PointLight(0xffffff, 2, 200);
+        scene.add(pointLight);
+        scene.add(new THREE.AmbientLight(0x222222));
+
+        camera.position.set(0, 30, 70);
+        camera.lookAt(0, 0, 0);
+
+        // --- 2. 互動邏輯 ---
+        let isDown = false;
+        let lastX, lastY;
+
+        window.addEventListener('mousedown', () => isDown = true);
+        window.addEventListener('mouseup', () => isDown = false);
+        window.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            const dx = e.clientX - lastX;
+            const dy = e.clientY - lastY;
+            scene.rotation.y += dx * 0.005;
+            scene.rotation.x += dy * 0.005;
+            lastX = e.clientX;
+            lastY = e.clientY;
+        });
+        window.addEventListener('mousemove', (e) => {
+            if (!isDown) { lastX = e.clientX; lastY = e.clientY; }
+        });
+
+        window.addEventListener('wheel', (e) => {
+            camera.position.z += e.deltaY * 0.05;
+            camera.position.z = Math.max(20, Math.min(camera.position.z, 300));
+        });
+
+        // --- 3. 吳春辰壓力感測 & 肝臟壽命連動邏輯 ---
+        let stress = 0;
+        let liverLife = 12; // 初始肝壽命
+
+        function hitWu() {
+            stress += 12;
+            liverLife += 2; // 每打一下，心情好一點，肝壽命回光返照 2%
+
+            const numDisplay = document.getElementById('stress-num');
+            const liverBar = document.getElementById('liver-bar'); // 抓取進度條元素
+
+            if (stress >= 100) {
+                stress = 100;
+                liverLife = 50; // 打到爆表，肝臟瞬間充滿活力
+                document.body.classList.add('shake');
+                numDisplay.innerText = "MAX!!";
+                liverBar.style.width = liverLife + "%";
+                
+                setTimeout(() => {
+                    document.body.classList.remove('shake');
+                    alert("吳春辰因承受不住你的意志，已被踢出銀河系。");
+                    
+                    // 重置狀態
+                    stress = 0;
+                    liverLife = 12; // 亢奮結束，回歸現實的疲累
+                    numDisplay.innerText = "0";
+                    liverBar.style.width = liverLife + "%";
+                }, 1000);
+            } else {
+                numDisplay.innerText = stress;
+                liverBar.style.width = liverLife + "%";
+            }
+        }
+
+        // --- 4. 動畫循環 ---
+        function animate() {
+            requestAnimationFrame(animate);
+            sun.rotation.y += 0.002;
+            planets.forEach(p => p.orbit.rotation.y += p.speed);
+            starField.rotation.y += 0.0001;
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
