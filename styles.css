@@ -1,0 +1,301 @@
+/* ===== Team Profile Wall ===== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #F8F9FA;
+  color: #1A1A1A;
+  line-height: 1.6;
+}
+
+/* --- Header --- */
+
+.hero {
+  text-align: center;
+  padding: 60px 20px 40px;
+}
+
+.hero h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+.subtitle {
+  color: #6B7280;
+  font-size: 1.1rem;
+  margin-top: 8px;
+}
+
+/* --- Profile Card Grid --- */
+
+.wall {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+/* --- Individual Card --- */
+
+.card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 28px 24px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+}
+
+.card .avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 16px;
+  border: 3px solid #F0F0F0;
+}
+
+.card .name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.card .title {
+  font-size: 0.85rem;
+  color: #E8590C;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.card .bio {
+  font-size: 0.9rem;
+  color: #6B7280;
+  margin-bottom: 16px;
+}
+
+.card .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.card .tag {
+  background: #FFF4E6;
+  color: #E8590C;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-weight: 500;
+}
+
+.card .links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.card .links a {
+  color: #9CA3AF;
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.15s;
+}
+
+.card .links a:hover {
+  color: #E8590C;
+}
+
+/* --- Detail Page Layout --- */
+
+.profile-page {
+  max-width: 800px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 24px;
+  color: #6B7280;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.back-link:hover {
+  color: #1A1A1A;
+}
+
+.profile-header {
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  display: flex;
+  gap: 32px;
+  align-items: center;
+}
+
+.profile-header .avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.profile-info h1 {
+  font-size: 2rem;
+  margin-bottom: 8px;
+}
+
+.profile-content {
+  margin-top: 32px;
+  background: white;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.profile-content h3 {
+  margin-bottom: 16px;
+  color: #374151;
+}
+
+/* --- Card Button --- */
+
+.view-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 16px;
+  background: #1A1A1A;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.view-btn:hover {
+  opacity: 0.8;
+}
+
+/* --- Empty State --- */
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 80px 20px;
+  color: #9CA3AF;
+}
+
+.empty-state p:first-child {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+/* --- Footer --- */
+
+footer {
+  text-align: center;
+  padding: 24px;
+  color: #9CA3AF;
+  font-size: 0.85rem;
+}
+
+/* --- Useless Stuff --- */
+
+.useless-box {
+  margin-top: 60px;
+  padding: 24px;
+  border: 2px dashed #D1D5DB;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.useless-box h4 {
+  margin-bottom: 16px;
+  color: #9CA3AF;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+.progress-container {
+  background: #E5E7EB;
+  height: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, #F59E0B, #EF4444);
+  width: 99%;
+  height: 100%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.luck-card {
+  font-size: 1.5rem;
+  margin: 20px 0;
+  cursor: help;
+}
+
+.boring-btn {
+  background: #F3F4F6;
+  border: 1px solid #D1D5DB;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.boring-btn:active {
+  transform: scale(0.95);
+}
+
+/* --- Back Button --- */
+
+.back-btn {
+  display: inline-block;
+  margin-bottom: 24px;
+  padding: 8px 16px;
+  background: white;
+  color: #374151;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid #E5E7EB;
+  transition: all 0.2s;
+}
+
+.back-btn:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+  transform: translateX(-4px);
+}
