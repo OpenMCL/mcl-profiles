@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- 亮橘色圓形背景 -->
+  <circle cx="50" cy="50" r="50" fill="#FF922B"/>
+  <!-- 極簡笑臉 -->
+  <circle cx="35" cy="42" r="6" fill="white"/>
+  <circle cx="65" cy="42" r="6" fill="white"/>
+  <path d="M 30 62 Q 50 78 70 62" stroke="white" stroke-width="7" fill="none" stroke-linecap="round"/>
+</svg>
