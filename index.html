@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MCL Profiles</title>
-    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/cards.css" />
   </head>
   <body>
     <div class="page">
@@ -34,7 +35,7 @@
           </div>
           <a href="profiles/arthur" class="view-btn">查看完整簡介</a>
         </div>
-        
+
         <!-- Luke -->
         <div class="card">
           <img class="avatar" src="assets/photos/luke.svg" alt="Demo" />
@@ -45,24 +46,24 @@
           </div>
           <a href="profiles/luke" class="view-btn">查看完整簡介</a>
         </div>
-        
-        <div class="card" 
-             style="position: relative; overflow: hidden; border: 1px solid rgba(99, 102, 241, 0.4); box-shadow: 0 0 15px rgba(99, 102, 241, 0.15); transition: all 0.3s ease;" 
-             onmouseover="this.style.boxShadow='0 0 25px rgba(99, 102, 241, 0.6)'; this.style.transform='translateY(-5px)';" 
-             onmouseout="this.style.boxShadow='0 0 15px rgba(99, 102, 241, 0.15)'; this.style.transform='translateY(0)';">
-          
-          <div style="position: absolute; top: -40px; right: -40px; width: 100px; height: 100px; background: #6366f1; filter: blur(50px); opacity: 0.4; pointer-events: none;"></div>
 
-          <img class="avatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Duan" alt="段祺瑞" style="border: 2px solid #6366f1; padding: 2px;" />
-          <h2 class="name" style="text-shadow: 0 0 8px rgba(99, 102, 241, 0.8);">段祺瑞</h2>
+        <div class="card card-featured">
+          <div class="glow"></div>
+
+          <img
+            class="avatar"
+            src="https://api.dicebear.com/7.x/avataaars/svg?seed=Duan"
+            alt="段祺瑞"
+          />
+          <h2 class="name">段祺瑞</h2>
           <p class="bio">好想睡覺，看到幫我打吳春辰一下</p>
-          
+
           <div class="tags">
-            <span class="tag" style="background: rgba(99, 102, 241, 0.15); border: 1px solid #6366f1; color: #818cf8;">修仙中</span>
-            <span class="tag" style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; color: #f87171;">對吳春辰武裝部隊</span>
+            <span class="tag tag-primary">修仙中</span>
+            <span class="tag tag-danger">對吳春辰武裝部隊</span>
           </div>
-          
-          <a href="profiles/rayhuang.html" class="view-btn" style="background: linear-gradient(90deg, #6366f1, #a855f7); border: none; color: white; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">進入星際觀測站</a>
+
+          <a href="profiles/rayhuang.html" class="view-btn">進入星際觀測站</a>
         </div>
         <!-- Leo -->
         <div class="card">
@@ -73,10 +74,9 @@
             <span class="tag">菜雞</span>
           </div>
           <a href="profiles/leo.html" class="view-btn">查看不完整簡介</a>
-
         </div>
 
-	<!-- Ama -->
+        <!-- Ama -->
         <!-- 大家要把卡片 HTML 貼在下面這個區塊 -->
         <!-- MEMBER_CARDS_START -->
 
@@ -86,7 +86,8 @@
           <h2 class="name">Ama</h2>
           <p class="bio">51BM</p>
           <div class="tags">
-            <span class="tag">Git untouchable</span><span class="tag">不是工程師</span>
+            <span class="tag">Git untouchable</span
+            ><span class="tag">不是工程師</span>
           </div>
           <a href="profiles/ama" class="view-btn">查看完整簡介</a>
         </div>
@@ -96,20 +97,20 @@
           <h2 class="name">林宥均</h2>
           <p class="bio">51BM</p>
           <div class="tags">
-            <span class="tag">Git untouchable</span><span class="tag">不是工程師</span>
+            <span class="tag">Git untouchable</span
+            ><span class="tag">不是工程師</span>
           </div>
           <a href="profiles/youjlin" class="view-btn">查看完整簡介</a>
         </div>
 
-        <!-- MEMBER_CARDS_END -->
-      </main>
-	<!-- gndof -->
+        <!-- gndof -->
         <div class="card">
           <img class="avatar" src="assets/photos/good.jpg" alt="Demo" />
           <h2 class="name">gndof</h2>
           <p class="bio">51BM</p>
           <div class="tags">
-            <span class="tag">Git untouchable</span><span class="tag">不是工程師</span>
+            <span class="tag">Git untouchable</span
+            ><span class="tag">不是工程師</span>
           </div>
           <a href="profiles/gndof.html" class="view-btn">查看完整簡介</a>
         </div>

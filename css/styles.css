@@ -43,85 +43,6 @@ body {
   padding: 0 24px 60px;
 }
 
-/* --- Individual Card --- */
-
-.card {
-  background: #FFFFFF;
-  border-radius: 12px;
-  padding: 28px 24px;
-  text-align: center;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-}
-
-.card .avatar {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 16px;
-  border: 3px solid #F0F0F0;
-}
-
-.card .name {
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 4px;
-}
-
-.card .title {
-  font-size: 0.85rem;
-  color: #E8590C;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 12px;
-}
-
-.card .bio {
-  font-size: 0.9rem;
-  color: #6B7280;
-  margin-bottom: 16px;
-}
-
-.card .tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.card .tag {
-  background: #FFF4E6;
-  color: #E8590C;
-  font-size: 0.75rem;
-  padding: 3px 10px;
-  border-radius: 99px;
-  font-weight: 500;
-}
-
-.card .links {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-}
-
-.card .links a {
-  color: #9CA3AF;
-  text-decoration: none;
-  font-size: 0.8rem;
-  transition: color 0.15s;
-}
-
-.card .links a:hover {
-  color: #E8590C;
-}
 
 /* --- Detail Page Layout --- */
 
@@ -178,25 +99,6 @@ body {
   color: #374151;
 }
 
-/* --- Card Button --- */
-
-.view-btn {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-top: 16px;
-  background: #1A1A1A;
-  color: white;
-  text-decoration: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  transition: opacity 0.2s;
-}
-
-.view-btn:hover {
-  opacity: 0.8;
-}
 
 /* --- Empty State --- */
 
@@ -294,8 +196,3 @@ footer {
   transition: all 0.2s;
 }
 
-.back-btn:hover {
-  background: #F9FAFB;
-  border-color: #D1D5DB;
-  transform: translateX(-4px);
-}
