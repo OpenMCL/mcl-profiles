@@ -173,6 +173,65 @@
             font-size: 0.7rem;
             letter-spacing: 2px;
         }
+
+        /* --- 惡整專用樣式 --- */
+        #sleep-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 10000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            user-select: none;
+        }
+
+        #sleep-overlay h1 {
+            font-size: 8vw;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.5));
+            animation: breathe 2s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+
+        .floating-ui {
+            transition: all 3s ease-in-out !important;
+        }
+
+        /* 偽造彈窗樣式 */
+        .fake-popup {
+            position: fixed;
+            background: #eee;
+            border: 2px solid #333;
+            color: #000;
+            padding: 10px;
+            font-family: "Courier New", Courier, monospace;
+            box-shadow: 5px 5px 0px #888;
+            z-index: 11000;
+            pointer-events: none;
+            width: 200px;
+            font-size: 0.7rem;
+        }
+
+        /* 文字混亂效果 */
+        .scrambled {
+            font-family: "Courier New", Courier, monospace !important;
+            color: #0f0 !important;
+            text-shadow: 0 0 5px #0f0;
+        }
+
+        /* 吳春辰游標 */
+        .wu-cursor {
+            cursor: url('https://api.dicebear.com/7.x/avataaars/svg?seed=Wu&size=32'), auto !important;
+        }
     </style>
 </head>
 <body>
@@ -210,6 +269,12 @@
     </div>
 
     <div class="hint">DRAG TO ROTATE / SCROLL TO ZOOM</div>
+
+    <div id="sleep-overlay" onclick="wakeUp()" style="cursor: pointer;">
+        <h1>Zzz...</h1>
+        <p>檢測到肝臟極度疲勞，進入強制冬眠模式</p>
+        <p style="font-size: 0.8rem; margin-top: 20px; color: #444;">(點擊螢幕喚醒：剩餘 <span id="wake-count">10</span> 次)</p>
+    </div>
 
     <script>
         // --- 1. Three.js 宇宙初始化 ---
@@ -289,46 +354,173 @@
             camera.position.z = Math.max(20, Math.min(camera.position.z, 300));
         });
 
-        // --- 3. 吳春辰壓力感測 & 肝臟壽命連動邏輯 ---
+        // --- 3. 惡整核心邏輯 (混沌模式) ---
         let stress = 0;
-        let liverLife = 12; // 初始肝壽命
+        let liverLife = 12;
+        let isChaos = false;
+        let wakeClicks = 10;
+        const loader = new THREE.TextureLoader();
 
         function hitWu() {
-            stress += 12;
-            liverLife += 2; // 每打一下，心情好一點，肝壽命回光返照 2%
-
+            stress += 10;
+            liverLife += 2;
+            
             const numDisplay = document.getElementById('stress-num');
-            const liverBar = document.getElementById('liver-bar'); // 抓取進度條元素
+            const liverBar = document.getElementById('liver-bar');
+            numDisplay.innerText = stress;
+            liverBar.style.width = liverLife + "%";
 
-            if (stress >= 100) {
-                stress = 100;
-                liverLife = 50; // 打到爆表，肝臟瞬間充滿活力
-                document.body.classList.add('shake');
-                numDisplay.innerText = "MAX!!";
-                liverBar.style.width = liverLife + "%";
-                
-                setTimeout(() => {
-                    document.body.classList.remove('shake');
-                    alert("吳春辰因承受不住你的意志，已被踢出銀河系。");
-                    
-                    // 重置狀態
-                    stress = 0;
-                    liverLife = 12; // 亢奮結束，回歸現實的疲累
-                    numDisplay.innerText = "0";
-                    liverBar.style.width = liverLife + "%";
-                }, 1000);
-            } else {
-                numDisplay.innerText = stress;
-                liverBar.style.width = liverLife + "%";
+            // 階段 1: 30% - 無重力 UI
+            if (stress >= 30 && !document.querySelector('.profile-header').classList.contains('floating-ui')) {
+                document.querySelector('.profile-header').classList.add('floating-ui');
+                document.querySelector('.useless-box').classList.add('floating-ui');
+                startFloating();
             }
+
+            // 階段 2: 60% - 吳春辰入侵
+            if (stress >= 60) {
+                planets.forEach((p, i) => {
+                    const texture = loader.load(`https://api.dicebear.com/7.x/avataaars/svg?seed=Wu${i + stress}`);
+                    p.orbit.children[0].material = new THREE.MeshBasicMaterial({ map: texture });
+                });
+            }
+
+            // 階段 3: 90% - 超新星爆炸預兆
+            if (stress >= 90) {
+                document.body.classList.add('shake');
+                starMat.color.setHex(0xff0000);
+            }
+
+            // 階段 4: 100% - 強制冬眠
+            if (stress >= 100) {
+                enterSleep();
+            }
+        }
+
+        function startFloating() {
+            const elements = document.querySelectorAll('.floating-ui');
+            setInterval(() => {
+                elements.forEach(el => {
+                    const x = (Math.random() - 0.5) * 100;
+                    const y = (Math.random() - 0.5) * 100;
+                    const r = (Math.random() - 0.5) * 30;
+                    el.style.transform = `translate(${x}px, ${y}px) rotate(${r}deg)`;
+                });
+            }, 3000);
+        }
+
+        function enterSleep() {
+            document.getElementById('sleep-overlay').style.display = 'flex';
+            wakeClicks = 10;
+            updateWakeCount();
+            isChaos = true;
+            startTheWutrix();
+            playSpaceNoise();
+        }
+
+        function startTheWutrix() {
+            // 1. 畫面隨機反轉
+            document.body.style.transform = "scaleX(-1) scaleY(-1) rotate(180deg)";
+            document.body.classList.add('wu-cursor');
+
+            // 2. 文字瘋狂混亂
+            const allText = document.querySelectorAll('h1, p, a, span, button');
+            
+            setInterval(() => {
+                if (!isChaos) return;
+                allText.forEach(el => {
+                    if (Math.random() > 0.7) {
+                        const words = ["吳春辰", "睡覺", "肝爆了", "DEBUG", "BUG"];
+                        el.innerText = words[Math.floor(Math.random() * words.length)] + Math.random().toString(36).substring(7);
+                        el.classList.add('scrambled');
+                    }
+                });
+            }, 300);
+
+            // 3. 彈窗地獄
+            setInterval(() => {
+                if (isChaos) spawnPopup();
+            }, 400);
+        }
+
+        function spawnPopup() {
+            const popup = document.createElement('div');
+            popup.className = 'fake-popup';
+            popup.style.left = Math.random() * 80 + '%';
+            popup.style.top = Math.random() * 80 + '%';
+            popup.innerHTML = `<strong>CRITICAL_ERROR</strong><br>吳春辰正在嘗試讀取你的肝臟<br>錯誤代碼: ${Math.random().toString(16)}`;
+            document.body.appendChild(popup);
+            setTimeout(() => popup.remove(), 2500);
+        }
+
+        // 4. 數位噪音生成器
+        function playSpaceNoise() {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.type = 'sawtooth';
+            oscillator.frequency.setValueAtTime(100, audioCtx.currentTime);
+            oscillator.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 2);
+            
+            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2);
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 2);
+        }
+
+        function updateWakeCount() {
+            const display = document.getElementById('wake-count');
+            if (display) display.innerText = wakeClicks;
+        }
+
+        function wakeUp() {
+            wakeClicks--;
+            updateWakeCount();
+            playSpaceNoise(); 
+            
+            // 讓 Zzz... 抖一下增加點擊感
+            const zzz = document.querySelector('#sleep-overlay h1');
+            if (zzz) {
+                zzz.style.transform = "scale(1.5)";
+                setTimeout(() => zzz.style.transform = "scale(1)", 100);
+            }
+
+            if (wakeClicks <= 0) {
+                location.reload(); 
+            }
+        }
+
+        function resetChaos() {
+            // 這個函數現在由 location.reload() 代替，以確保所有混亂都被清除
+            location.reload();
         }
 
         // --- 4. 動畫循環 ---
         function animate() {
             requestAnimationFrame(animate);
-            sun.rotation.y += 0.002;
-            planets.forEach(p => p.orbit.rotation.y += p.speed);
-            starField.rotation.y += 0.0001;
+            
+            if (isChaos) {
+                // 混沌模式下的瘋狂動畫
+                sun.rotation.y += 0.5;
+                sun.scale.setScalar(Math.sin(Date.now() * 0.01) + 2);
+                planets.forEach(p => {
+                    p.orbit.rotation.y += 0.2;
+                    p.orbit.rotation.z += 0.1;
+                });
+                starField.rotation.y += 0.05;
+                starMat.color.setHex(Math.random() * 0xffffff);
+            } else {
+                sun.rotation.y += 0.002;
+                sun.scale.setScalar(1);
+                planets.forEach(p => p.orbit.rotation.y += p.speed);
+                starField.rotation.y += 0.0001;
+            }
+            
             renderer.render(scene, camera);
         }
 
