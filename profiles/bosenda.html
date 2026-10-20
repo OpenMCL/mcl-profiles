@@ -1,38 +1,1026 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>個人頁面模板</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07111f">
+  <title>游博森 | Developer Profile</title>
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
-  <link rel="stylesheet" href="../css/styles.css">
 </head>
+<style>
+    
+/* ===== Global ===== */
+:root {
+  --bg: #07111f;
+  --panel: rgba(13, 29, 46, 0.82);
+  --panel-light: #102438;
+  --cyan: #5eead4;
+  --blue: #38bdf8;
+  --text: #f0fdfa;
+  --muted: #94a3b8;
+  --border: rgba(94, 234, 212, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body.profile-page {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    "Inter", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  line-height: 1.6;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button {
+  font: inherit;
+}
+
+::selection {
+  background: var(--cyan);
+  color: var(--bg);
+}
+
+/* ===== Background ===== */
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(94, 234, 212, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 234, 212, 0.035) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
+}
+
+.glow {
+  position: fixed;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  filter: blur(110px);
+  opacity: 0.13;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-one {
+  top: -100px;
+  left: -100px;
+  background: #06b6d4;
+}
+
+.glow-two {
+  right: -150px;
+  top: 45%;
+  background: #2563eb;
+}
+
+/* ===== Back Button ===== */
+.back-btn {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 28px 0 0 5%;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  transition: 0.25s ease;
+}
+
+.back-btn span {
+  color: var(--cyan);
+  font-size: 18px;
+}
+
+.back-btn:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  background: rgba(94, 234, 212, 0.06);
+  transform: translateX(-3px);
+}
+
+/* ===== Main Layout ===== */
+.profile-wrapper {
+  position: relative;
+  z-index: 1;
+  width: min(920px, 90%);
+  margin: 45px auto 0;
+  animation: fade-in 0.8s ease both;
+}
+
+.top-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 36px;
+  color: #64748b;
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 12px var(--cyan);
+  animation: pulse 2s infinite;
+}
+
+.label-divider {
+  color: var(--cyan);
+}
+
+/* ===== Profile Header ===== */
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  padding: 34px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: linear-gradient(
+    120deg,
+    rgba(16, 36, 56, 0.9),
+    rgba(7, 17, 31, 0.8)
+  );
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+}
+
+.avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+  width: 154px;
+  height: 154px;
+  display: grid;
+  place-items: center;
+}
+
+.avatar-ring {
+  position: absolute;
+  inset: -8px;
+  border: 1px dashed rgba(94, 234, 212, 0.55);
+  border-radius: 50%;
+  animation: ring-rotate 18s linear infinite;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 3px solid rgba(94, 234, 212, 0.55);
+  border-radius: 50%;
+  background: var(--panel-light);
+  box-shadow: 0 0 35px rgba(94, 234, 212, 0.16);
+}
+
+.avatar-badge {
+  position: absolute;
+  right: -8px;
+  bottom: 5px;
+  padding: 4px 9px;
+  border: 1px solid var(--cyan);
+  border-radius: 5px;
+  background: var(--bg);
+  color: var(--cyan);
+  font-family: monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+.profile-info {
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--cyan);
+  font-family: monospace;
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+.profile-info h1 {
+  margin: 0;
+  font-size: clamp(32px, 5vw, 48px);
+  line-height: 1.25;
+  letter-spacing: 3px;
+}
+
+.cursor {
+  color: var(--cyan);
+  animation: blink 1s step-end infinite;
+}
+
+.profile-description {
+  margin: 16px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  padding: 4px 10px;
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 5px;
+  background: rgba(56, 189, 248, 0.06);
+  color: #7dd3fc;
+  font-family: monospace;
+  font-size: 11px;
+  transition: 0.2s ease;
+}
+
+.tag:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+/* ===== Terminal ===== */
+.terminal-card {
+  margin-top: 24px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: rgba(5, 14, 25, 0.9);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.12);
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 13px 18px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(16, 36, 56, 0.65);
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.terminal-dots span {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.terminal-dots span:nth-child(1) {
+  background: #fb7185;
+}
+
+.terminal-dots span:nth-child(2) {
+  background: #fbbf24;
+}
+
+.terminal-dots span:nth-child(3) {
+  background: #5eead4;
+}
+
+.terminal-title {
+  flex: 1;
+  color: #64748b;
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.terminal-icon {
+  color: var(--cyan);
+}
+
+.terminal-body {
+  padding: 22px 26px 26px;
+  color: #cbd5e1;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.terminal-body p {
+  margin: 4px 0;
+}
+
+.indent {
+  padding-left: 28px;
+}
+
+.code-purple {
+  color: #c4b5fd;
+}
+
+.code-blue {
+  color: #7dd3fc;
+}
+
+.code-green {
+  color: #86efac;
+}
+
+.code-orange {
+  color: #fdba74;
+}
+
+.terminal-comment {
+  margin-top: 15px !important;
+  color: #64748b;
+}
+
+.terminal-prompt {
+  margin-top: 22px !important;
+  color: var(--cyan);
+}
+
+/* ===== Stats ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.stat-card {
+  padding: 23px 20px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  transition: border-color 0.25s, transform 0.25s;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(94, 234, 212, 0.5);
+}
+
+.stat-icon {
+  color: var(--cyan);
+  font-family: monospace;
+  font-size: 23px;
+}
+
+.stat-label {
+  margin: 15px 0 4px;
+  color: #64748b;
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 1.3px;
+}
+
+.stat-card h2 {
+  margin: 5px 0;
+  font-size: 20px;
+}
+
+.stat-note {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+/* ===== Useless Box ===== */
+.useless-box {
+  margin-top: 24px;
+  padding: 30px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(
+    145deg,
+    rgba(13, 29, 46, 0.95),
+    rgba(7, 17, 31, 0.94)
+  );
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-heading .eyebrow {
+  font-size: 10px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.level-badge {
+  padding: 5px 11px;
+  border: 1px solid rgba(94, 234, 212, 0.35);
+  border-radius: 6px;
+  color: var(--cyan);
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+  color: #cbd5e1;
+  font-size: 12px;
+}
+
+.progress-number {
+  color: var(--cyan);
+}
+
+.progress-container {
+  height: 7px;
+  margin-top: 12px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: #1e293b;
+}
+
+.progress-bar {
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #0d9488, #5eead4, #7dd3fc);
+  box-shadow: 0 0 15px rgba(94, 234, 212, 0.35);
+  animation: load-progress 1.8s 0.3s ease-out forwards;
+}
+
+.small-note {
+  margin: 10px 0 25px;
+  color: #64748b;
+  font-size: 11px;
+}
+
+/* ===== Fortune Card ===== */
+.luck-card {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 19px;
+  border: 1px solid rgba(94, 234, 212, 0.17);
+  border-radius: 10px;
+  background: rgba(94, 234, 212, 0.035);
+}
+
+.luck-icon {
+  display: grid;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: rgba(94, 234, 212, 0.06);
+  font-size: 24px;
+}
+
+.luck-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.luck-label {
+  color: #64748b;
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+}
+
+.luck-content h3 {
+  margin: 4px 0;
+  color: var(--cyan);
+  font-size: 16px;
+}
+
+.luck-content p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.refresh-btn {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--cyan);
+  cursor: pointer;
+  font-size: 22px;
+  transition: background 0.2s;
+}
+
+.refresh-btn:hover {
+  background: rgba(94, 234, 212, 0.1);
+}
+
+.spinning {
+  animation: spin 0.45s ease;
+}
+
+/* ===== Button ===== */
+.boring-btn {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  padding: 14px 18px;
+  border: 1px solid rgba(94, 234, 212, 0.4);
+  border-radius: 8px;
+  background: rgba(94, 234, 212, 0.06);
+  color: var(--cyan);
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.25s ease;
+}
+
+.boring-btn:hover {
+  border-color: var(--cyan);
+  background: rgba(94, 234, 212, 0.12);
+  box-shadow: 0 0 24px rgba(94, 234, 212, 0.08);
+}
+
+.button-arrow {
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.boring-btn:hover .button-arrow {
+  transform: translateX(5px);
+}
+
+.button-clicked {
+  animation: button-shake 0.25s ease;
+}
+
+.button-result {
+  min-height: 20px;
+  margin: 12px 0 0;
+  color: #64748b;
+  font-family: monospace;
+  font-size: 11px;
+}
+
+/* ===== Footer ===== */
+.profile-footer {
+  padding: 32px 0 40px;
+  text-align: center;
+  color: #475569;
+  font-family: monospace;
+  font-size: 9px;
+  letter-spacing: 1.3px;
+}
+
+.profile-footer p {
+  margin: 5px 0;
+}
+
+.profile-footer span:first-child {
+  color: #fb7185;
+}
+
+.footer-divider {
+  padding: 0 5px;
+  color: #334155;
+}
+
+/* ===== Animations ===== */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.4;
+    box-shadow: 0 0 4px var(--cyan);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes ring-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes load-progress {
+  to {
+    width: 72%;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes button-shake {
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 640px) {
+  .back-btn {
+    margin-top: 18px;
+    margin-left: 5%;
+  }
+
+  .profile-wrapper {
+    margin-top: 30px;
+  }
+
+  .top-label {
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 24px;
+    font-size: 9px;
+  }
+
+  .profile-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+    padding: 26px 22px;
+  }
+
+  .avatar-wrapper {
+    width: 112px;
+    height: 112px;
+  }
+
+  .profile-info h1 {
+    font-size: 34px;
+  }
+
+  .profile-description {
+    line-height: 1.8;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stat-card {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    column-gap: 10px;
+    padding: 16px;
+  }
+
+  .stat-icon {
+    grid-row: span 3;
+    align-self: center;
+  }
+
+  .stat-label {
+    margin: 0;
+  }
+
+  .stat-card h2 {
+    font-size: 17px;
+  }
+
+  .stat-note {
+    margin-top: 2px;
+  }
+
+  .useless-box {
+    padding: 22px 18px;
+  }
+
+  .section-heading h2 {
+    font-size: 20px;
+  }
+
+  .progress-info {
+    flex-wrap: wrap;
+  }
+
+  .luck-card {
+    gap: 11px;
+    padding: 14px 11px;
+  }
+
+  .luck-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .luck-content h3 {
+    font-size: 14px;
+  }
+
+  .luck-content p {
+    line-height: 1.6;
+  }
+
+  .terminal-body {
+    padding: 20px 15px;
+    font-size: 11px;
+    overflow-x: auto;
+  }
+
+  .terminal-prompt {
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
+
 <body class="profile-page">
 
-  <a href="../index.html" class="back-btn">回到首頁</a>
+  <div class="bg-grid"></div>
+  <div class="glow glow-one"></div>
+  <div class="glow glow-two"></div>
 
-  <!-- 個人頁面的大標題與內容 -->
-  <header class="profile-header">
-    <img class="avatar" src="../assets/photos/good.jpg" alt="頭像">
-    <div class="profile-info">
-      <h1>游博森</h1>
-      <p>我喜歡寫程式，也喜歡打程式，還喜歡寫程式！</p>
-    </div>
-  </header>
+  <a href="../index.html" class="back-btn">
+    <span>←</span> BACK TO HOME
+  </a>
 
-  <!-- 有趣但沒意義的小東西 -->
-  <section class="useless-box">
-    <h4>工程師修仙進度</h4>
-    <div class="progress-container">
-      <div class="progress-bar"></div>
-    </div>
-    <p style="font-size: 0.7rem; color: #9CA3AF;">距離成為大神還差 1% (預計耗時 50 年)</p>
+  <main class="profile-wrapper">
 
-    <div class="luck-card" title="點擊重新整理獲取新運勢">
-      今日運勢：<span>大吉 (宜寫 Code)</span>
+    <div class="top-label">
+      <span class="status-dot"></span>
+      SYSTEM ONLINE
+      <span class="label-divider">/</span>
+      DEVELOPER PROFILE
     </div>
 
-    <button class="boring-btn" onclick="alert('都說沒用了你還點！')">這是一個沒用的按鈕</button>
-  </section>
+    <header class="profile-header">
+
+      <div class="avatar-wrapper">
+        <div class="avatar-ring"></div>
+        <img class="avatar" src="../assets/photos/good.jpg" alt="游博森的頭像">
+        <span class="avatar-badge">DEV</span>
+      </div>
+
+      <div class="profile-info">
+        <p class="eyebrow">HELLO, WORLD! I'M</p>
+        <h1>游博森<span class="cursor">_</span></h1>
+        <p class="profile-description">
+          我喜歡寫程式，也喜歡打程式，還喜歡寫程式！
+        </p>
+
+        <div class="tag-list">
+          <span class="tag">C++</span>
+          <span class="tag">Python</span>
+          <span class="tag">Web Dev</span>
+          <span class="tag">Problem Solver</span>
+        </div>
+      </div>
+
+    </header>
+
+    <section class="terminal-card">
+      <div class="terminal-header">
+        <div class="terminal-dots">
+          <span></span><span></span><span></span>
+        </div>
+        <span class="terminal-title">user@developer: ~/about_me.cpp</span>
+        <span class="terminal-icon">⌘</span>
+      </div>
+
+      <div class="terminal-body">
+        <p><span class="code-purple">class</span>
+          <span class="code-blue">Developer</span> {</p>
+        <p class="indent">
+          <span class="code-purple">string</span> name =
+          <span class="code-green">"游博森"</span>;
+        </p>
+        <p class="indent">
+          <span class="code-purple">string</span> passion =
+          <span class="code-green">"Coding"</span>;
+        </p>
+        <p class="indent">
+          <span class="code-purple">bool</span> sleeping =
+          <span class="code-orange">false</span>;
+        </p>
+        <p>};</p>
+        <p class="terminal-comment">
+          // TODO: 成為更強的工程師
+        </p>
+        <p class="terminal-prompt">
+          <span>➜</span> Ready to build something awesome?
+          <span class="cursor">▋</span>
+        </p>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <article class="stat-card">
+        <span class="stat-icon">&lt;/&gt;</span>
+        <p class="stat-label">FAVORITE ACTIVITY</p>
+        <h2>寫 Code</h2>
+        <p class="stat-note">Eat. Sleep. Code. Repeat.</p>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-icon">⚡</span>
+        <p class="stat-label">CURRENT STATUS</p>
+        <h2>持續進化</h2>
+        <p class="stat-note">New skill unlocked...</p>
+      </article>
+
+      <article class="stat-card">
+        <span class="stat-icon">∞</span>
+        <p class="stat-label">BUGS TO FIX</p>
+        <h2>無限大</h2>
+        <p class="stat-note">It's not a bug, it's a feature.</p>
+      </article>
+    </section>
+
+    <section class="useless-box">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">SIDE QUEST #001</p>
+          <h2>工程師修仙系統</h2>
+        </div>
+        <span class="level-badge">LV. 99?</span>
+      </div>
+
+      <div class="progress-info">
+        <span>距離成為大神</span>
+        <span class="progress-number">99% 的路還沒走完</span>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar"></div>
+      </div>
+
+      <p class="small-note">
+        修仙進度看似很高，實際上連環境都還沒裝好。
+      </p>
+
+      <div class="luck-card">
+        <div class="luck-icon" id="luck-icon">🔮</div>
+        <div class="luck-content">
+          <span class="luck-label">TODAY'S DEVELOPER LUCK</span>
+          <h3 id="luck-title">今日運勢：載入中...</h3>
+          <p id="luck-description">正在連接宇宙級演算法...</p>
+        </div>
+        <button class="refresh-btn" id="luck-refresh"
+          type="button" aria-label="重新抽取運勢">↻</button>
+      </div>
+
+      <button class="boring-btn" id="useless-button" type="button">
+        <span>執行無意義操作</span>
+        <span class="button-arrow">→</span>
+      </button>
+
+      <p class="button-result" id="button-result" aria-live="polite">
+        WARNING: 此按鈕沒有任何實際用途。
+      </p>
+    </section>
+
+    <footer class="profile-footer">
+      <p>DESIGNED WITH <span>♥</span> AND TOO MUCH COFFEE</p>
+      <p>© 2026 BO-SEN.exe <span class="footer-divider">|</span> ALL BUGS RESERVED</p>
+    </footer>
+
+  </main>
+
+  <script>
+    const fortunes = [
+      {
+        icon: "🔥",
+        title: "大吉：宜寫 Code",
+        description: "今天的程式一次就能編譯成功……才怪。",
+      },
+      {
+        icon: "🐛",
+        title: "中吉：Bug 退散",
+        description: "你找到了一個 Bug，但又創造了三個。",
+      },
+      {
+        icon: "☕",
+        title: "小吉：咖啡加倍",
+        description: "今天適合重構程式，以及重構自己。",
+      },
+      {
+        icon: "💀",
+        title: "凶：不要碰 Production",
+        description: "建議今天只看 Code，不要執行 Code。",
+      },
+      {
+        icon: "⚡",
+        title: "超吉：靈感爆發",
+        description: "你的下一個 Side Project 又要開始了。",
+      },
+      {
+        icon: "🧙",
+        title: "仙人指路：先看錯誤訊息",
+        description: "答案可能就在你忽略的第一行。",
+      },
+    ];
+
+    const luckIcon = document.getElementById("luck-icon");
+    const luckTitle = document.getElementById("luck-title");
+    const luckDescription = document.getElementById("luck-description");
+    const luckRefresh = document.getElementById("luck-refresh");
+
+    function updateLuck() {
+      const previousTitle = luckTitle.textContent;
+      let fortune;
+
+      do {
+        fortune = fortunes[Math.floor(Math.random() * fortunes.length)];
+      } while (fortune.title === previousTitle);
+
+      luckIcon.textContent = fortune.icon;
+      luckTitle.textContent = fortune.title;
+      luckDescription.textContent = fortune.description;
+
+      luckRefresh.classList.remove("spinning");
+      void luckRefresh.offsetWidth;
+      luckRefresh.classList.add("spinning");
+    }
+
+    luckRefresh.addEventListener("click", updateLuck);
+    updateLuck();
+
+    const uselessButton = document.getElementById("useless-button");
+    const buttonResult = document.getElementById("button-result");
+
+    const uselessMessages = [
+      "Error 404: 意義不存在。",
+      "成功消耗 0.0001 秒的人生。",
+      "恭喜！你的 Bug 數量 +1。",
+      "正在執行……執行了個寂寞。",
+      "系統提示：你真的很閒。",
+      "Achievement Unlocked: 無聊大師。",
+    ];
+
+    uselessButton.addEventListener("click", () => {
+      buttonResult.textContent =
+        uselessMessages[Math.floor(Math.random() * uselessMessages.length)];
+
+      uselessButton.classList.remove("button-clicked");
+      void uselessButton.offsetWidth;
+      uselessButton.classList.add("button-clicked");
+    });
+  </script>
 
 </body>
 </html>
+
