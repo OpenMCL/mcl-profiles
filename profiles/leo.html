@@ -4,10 +4,15 @@
   <meta charset="UTF-8">
   <title>個人頁面模板</title>
   <link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+
   <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body class="profile-page">
-
+  <style>
+    body {
+      background-image: url('../assets/photos/juno.jpg');
+    }
+  </style>
   <a href="../index.html" class="back-btn">回到首頁</a>
 
   <!-- 個人頁面的大標題與內容 -->
@@ -24,18 +29,20 @@
   </header>
 
   <!-- 有趣但沒意義的小東西 -->
-  <section class="useless-box">
+  <section class="useless-box" style="background-color: white;">
     <h4>工程師修仙進度</h4>
     <div class="progress-container">
       <div class="progress-bar"></div>
     </div>
-    <p style="font-size: 0.7rem; color: #9CA3AF;">距離成為大神還差 1% (預計耗時 50 年)</p>
+    <p style="font-size: 0.7rem; color: #9CA3AF;">距離成為大神還差 67% (預計耗時 67 年)</p>
 
     <div class="luck-card" title="點擊重新整理獲取新運勢">
-      今日運勢：<span>大吉 (宜寫 Code)</span>
+      今日運勢：<span>大兇 (不宜寫 Code)</span>
     </div>
 
-    <button class="boring-btn" onclick="alert('都說沒用了你還點！')">這是一個沒用的按鈕</button>
+    <a target="_blank" href="https://youtu.be/_nai5sA6VDU">
+        <button class="boring-btn">這是一個沒用的按鈕</button>
+    </a>
   </section>
 
 </body>
